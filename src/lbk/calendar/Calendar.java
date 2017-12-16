@@ -24,14 +24,20 @@ public class Calendar {
 		
 		//월을 입력받아 해당월의 마지막일자를 구하기
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("월을 입력하세요");
-		int month = scanner.nextInt();
+		
+        System.out.println("반복횠수를 입력하세요");
+        int repeat = scanner.nextInt();
+        for(int i=0; i < repeat;i++){
+    		System.out.println("월을 입력하세요");
+    		int month = scanner.nextInt();
+    		Calendar cal = new Calendar();
+    		System.out.printf("%d월의 마지막일은 %d입니다\n",month,cal.getMaxDayOfMonth(month));
+        }
+        System.out.println("Bye~~");
+        
 		scanner.close();
-		
-		Calendar cal = new Calendar();
-		System.out.printf("%d월의 마지막일은 %d입니다",month,cal.getMaxDayOfMonth(month));
-		
-//		샘플칼렌더 출력하기
+
+		//		샘플칼렌더 출력하기
 //		cal.prtSampleCalendar();
 	}
 

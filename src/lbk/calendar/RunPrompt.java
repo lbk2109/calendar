@@ -13,7 +13,6 @@ public class RunPrompt {
 		System.out.println("| 3. 달력 보기                ");
 		System.out.println("| h. 도움말 q. 종료          ");
 		System.out.println("+----------------------+");
-
 	}
 
 	public int parseDay(String week) {
@@ -69,7 +68,6 @@ public class RunPrompt {
 		}
 		System.out.printf("Bye~~\n\n\n");
 		scanner.close();
-
 	}
 
 	private static void cmdCal(Scanner s, Calendar c) {

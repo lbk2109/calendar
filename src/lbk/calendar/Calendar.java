@@ -1,19 +1,47 @@
 package lbk.calendar;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Calendar {
 
 	private static final int[] MAXDAY_OF_MONTH = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	private static final int[] MAXDAY_OF_LEAP_MONTH = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
- 
+	private static final String SAVE_FILE = "calendar.dat";
+
 	private HashMap<Date, PlanItem> planMap;
-	
+
 	public Calendar() {
 		planMap = new HashMap<Date, PlanItem>();
+		File f = new File(SAVE_FILE);
+		if (!f.exists()) {
+			System.err.println("No Save File");
+			return;
+		}
+
+		try {
+			Scanner s;
+			s = new Scanner(f);
+			while (s.hasNext()) {
+				String line = s.nextLine();
+				String[] words = line.split(",");
+				String date = words[0];
+				String detail = words[1].replaceAll("\"","");
+				System.out.println(date+":"+detail);
+				//
+				PlanItem p = new PlanItem(date, detail);
+				planMap.put(p.getDate(), p);
+			}
+			s.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public boolean isLeapYear(int year) {
@@ -24,9 +52,9 @@ public class Calendar {
 
 	public int getMaxDayOfMonth(int year, int month) {
 		if (isLeapYear(year)) {
-			return (MAXDAY_OF_LEAP_MONTH[month-1]);
+			return (MAXDAY_OF_LEAP_MONTH[month - 1]);
 		}
-		return (MAXDAY_OF_MONTH[month-1]);
+		return (MAXDAY_OF_MONTH[month - 1]);
 	}
 
 	public void prtCalendar(int year, int month) {
@@ -84,20 +112,28 @@ public class Calendar {
 
 		return weekday;
 	}
-	
-	public void registerPlan(String strdate, String plan) 
-	{
+
+	public void registerPlan(String strdate, String plan) {
 		PlanItem p = new PlanItem(strdate, plan);
 		planMap.put(p.getDate(), p);
+		//
+		File f = new File(SAVE_FILE);
+		String item = p.saveString();
+		try {
+			FileWriter fw = new FileWriter(f, true);
+			fw.write(item);
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	public PlanItem SearchPlan(String strDate) 
-	{
+
+	public PlanItem SearchPlan(String strDate) {
 		Date date = PlanItem.getDatefromString(strDate);
-		return(planMap.get(date));
+		return (planMap.get(date));
 	}
-	
-	public static void main(String[] args)  {
+
+	public static void main(String[] args) {
 		Calendar cal = new Calendar();
 		System.out.println(cal.getWeekDay(1970, 1, 1) == 4);
 		System.out.println(cal.getWeekDay(1971, 1, 1) == 5);
@@ -105,7 +141,7 @@ public class Calendar {
 		System.out.println(cal.getWeekDay(1973, 1, 1) == 1);
 		System.out.println(cal.getWeekDay(1974, 1, 1) == 2);
 
-		cal.registerPlan("2017-12-20","월급날!!ㅎㅎ");		
+		cal.registerPlan("2017-12-20", "월급날!!ㅎㅎ");
 		System.out.println(cal.SearchPlan("2017-12-20").equals("월급날!!ㅎㅎ"));
 	}
 }

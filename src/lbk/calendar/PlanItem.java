@@ -23,6 +23,12 @@ public class PlanItem {
 		return planDate;
 	}
 
+	public String saveString() {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String sdate = formatter.format(planDate);
+		return sdate + "," +"\""+ detail+ "\""+ "\n";
+	}
+
 	public static Date getDatefromString(String strDate) {
 		Date date = null;
 		try {
@@ -32,4 +38,5 @@ public class PlanItem {
 		}
 		return date;
 	}
+
 }

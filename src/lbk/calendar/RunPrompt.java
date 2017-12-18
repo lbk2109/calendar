@@ -93,30 +93,35 @@ public class RunPrompt {
 		}
 	}
 
-	private static void cmdSearch(Scanner s, Calendar c) throws ParseException {
+	private static void cmdSearch(Scanner s, Calendar c) {
 		System.out.println("[일정 검색]");
 		System.out.println("날짜를 입력해주세요(yyyy-MM-dd)");
 		String date = s.next();
-		String plan = c.SearchPlan(date);
-		System.out.println(plan);
+		PlanItem plan = c.SearchPlan(date);
+		if (plan != null)
+			System.out.println(plan.detail);
+		else
+			System.out.println("일정이 없습니다.");
 	}
 
 	private static void cmdResister(Scanner s, Calendar c) throws ParseException {
 		System.out.println("[새해일정 등록]");
 		System.out.println("날짜를 입력해주세요(yyyy-MM-dd)");
 		String date = s.next();
-		
+
 		System.out.println("입정을 입력해주세요.(문장의 끝에 ;을 입력해주세요!)");
 		String text = "";
-		while(true) {
-			String word = s.next();
-			text += word + " ";
-			if(word.endsWith(";"))
-				break;
-		}
 		
+		String word;
+		while(!(word=s.next()).endsWith(";"))
+		{
+			text += word + " ";
+		}
+		word = word.replace(";"	, "");
+		text += word;
+
 		c.registerPlan(date, text);
-				
+
 	}
 
 }

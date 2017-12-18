@@ -10,10 +10,10 @@ public class Calendar {
 	private static final int[] MAXDAY_OF_MONTH = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	private static final int[] MAXDAY_OF_LEAP_MONTH = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
  
-	private HashMap<Date, String> planMap;
+	private HashMap<Date, PlanItem> planMap;
 	
 	public Calendar() {
-		planMap = new HashMap<Date, String>();
+		planMap = new HashMap<Date, PlanItem>();
 	}
 
 	public boolean isLeapYear(int year) {
@@ -85,22 +85,19 @@ public class Calendar {
 		return weekday;
 	}
 	
-	public void registerPlan(String strdate, String plan) throws ParseException
+	public void registerPlan(String strdate, String plan) 
 	{
-		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strdate);
-		System.out.println(date);
-		
-		planMap.put(date, plan);
+		PlanItem p = new PlanItem(strdate, plan);
+		planMap.put(p.getDate(), p);
 	}
 	
-	public String SearchPlan(String strdate) throws ParseException
+	public PlanItem SearchPlan(String strDate) 
 	{
-		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strdate);
-		String plan = planMap.get(date);
-		return (plan);
+		Date date = PlanItem.getDatefromString(strDate);
+		return(planMap.get(date));
 	}
 	
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args)  {
 		Calendar cal = new Calendar();
 		System.out.println(cal.getWeekDay(1970, 1, 1) == 4);
 		System.out.println(cal.getWeekDay(1971, 1, 1) == 5);
